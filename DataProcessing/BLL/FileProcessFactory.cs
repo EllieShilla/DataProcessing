@@ -21,7 +21,6 @@ namespace DataProcessing
                     return new FileReaderCsv(Encoding.UTF8, file.FullName);
                 default:
                     throw new NotImplementedException();
-                    break;
             }
 
         }
