@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataProcessing.BLL;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,8 +12,13 @@ namespace DataProcessing
     {
         private readonly string _fileName = System.Configuration.ConfigurationManager.AppSettings["folderPathA"];
         private readonly FileSystemWatcher _watcher;
+        List<PaymentData> _paymentData;
+        private PaymentDataList paymentDataList;
+        private FolderAndFile folderAndFile;
         public FileTracker()
         {
+            _paymentData = new List<PaymentData>();
+            folderAndFile = new FolderAndFile();
             _watcher = new FileSystemWatcher(_fileName);
             _watcher.EnableRaisingEvents = true;
             _watcher.Created += Watcher_Created;
@@ -31,18 +37,29 @@ namespace DataProcessing
 
             try
             {
-                var reader = new FileProcessFactory().GetFileReader(new FileInfo(e.FullPath));
-                TransformData transformData = new TransformData();
-
-                foreach (var str in await reader.ReadFileByLineAsync())
-                {
-                    transformData.Transform(str);
-                }
+                await readAndWriteFile(e.FullPath);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Can not access a file: {e.FullPath} {ex.Message}");
             }
+        }
+
+        private async Task readAndWriteFile(string filePath)
+        {
+            var reader = new FileProcessFactory().GetFileReader(new FileInfo(filePath));
+            TransformData transformData = new TransformData();
+
+            foreach (var str in await reader.ReadFileByLineAsync())
+            {
+                _paymentData.Add(transformData.ParsingData(str));
+            }
+
+            _paymentData.RemoveAll(item => item == null);
+            paymentDataList = new PaymentDataList(_paymentData);
+            paymentDataList.CreatePaymentDataList();
+            folderAndFile.JsonSerializerAndSave(paymentDataList.ReturnPaymentDataList());
+            _paymentData.Clear();
         }
     }
 }

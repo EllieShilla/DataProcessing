@@ -57,11 +57,14 @@
     <Compile Include="BLL\FileReaderCsv.cs" />
     <Compile Include="BLL\FileReaderTxt.cs" />
     <Compile Include="BLL\FileTracker.cs" />
+    <Compile Include="BLL\FolderAndFile.cs" />
     <Compile Include="BLL\IFileReader.cs" />
+    <Compile Include="BLL\MidnightTimer.cs" />
     <Compile Include="BLL\Model\PaymentData.cs" />
+    <Compile Include="BLL\PaymentDataList.cs" />
+    <Compile Include="BLL\PaymentDataObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BLL\SaveIntoJSON.cs" />
     <Compile Include="BLL\TransformData.cs" />
   </ItemGroup>
   <ItemGroup>

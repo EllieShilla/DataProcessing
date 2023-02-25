@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DataProcessing.BLL;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,7 +19,6 @@ namespace DataProcessing
         private string[] splitQuotes;
         private string[] splitCommas;
         private string[] jsonInput;
-        private SaveIntoJSON intoJSON;
 
         public TransformData()
         {
@@ -28,23 +28,20 @@ namespace DataProcessing
             };
         }
 
-        public bool Transform(string data)
+        public PaymentData ParsingData(string data)
         {
             if (!SplitString(data))
-                return false;
+                return null;
 
             if (isStringCanBeParse(jsonInput[0], jsonInput[1], jsonInput[2], jsonInput[3], jsonInput[4], jsonInput[5], jsonInput[6]))
             {
-                intoJSON = new SaveIntoJSON(jsonInput[0], jsonInput[1], jsonInput[2], decimalBuff, dataBuff, longBuff, jsonInput[6]);
-                intoJSON.AddNewData();
-                return true;
+                return PaymentDataObject.CreatePaymentData(jsonInput[0], jsonInput[1], jsonInput[2], decimalBuff, dataBuff, longBuff, jsonInput[6]);
             }
             else
             {
                 Console.WriteLine($"{data} not correct");
-                return false;
+                return null;
             }
-
         }
 
         private bool SplitString(string data)
