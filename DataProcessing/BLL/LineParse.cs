@@ -1,16 +1,12 @@
 ﻿using DataProcessing.BLL;
-using Newtonsoft.Json;
+using DataProcessing.BLL.Log;
+using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataProcessing
 {
-    public class TransformData
+    public class LineParse
     {
         private NumberFormatInfo formatInfo;
         private decimal decimalBuff;
@@ -20,7 +16,7 @@ namespace DataProcessing
         private string[] splitCommas;
         private string[] jsonInput;
 
-        public TransformData()
+        public LineParse()
         {
             formatInfo = new NumberFormatInfo()
             {
@@ -39,7 +35,6 @@ namespace DataProcessing
             }
             else
             {
-                Console.WriteLine($"{data} not correct");
                 return null;
             }
         }
@@ -55,7 +50,6 @@ namespace DataProcessing
 
                 if (splitQuotes.Length != 3)
                 {
-                    Console.WriteLine($"{data} not correct");
                     return false;
                 }
 
@@ -64,13 +58,13 @@ namespace DataProcessing
 
                 if (splitCommas.Length != 4)
                 {
-                    Console.WriteLine($"{data} not correct");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{data} not correct");
+                MetaLog.FoundErrors();
+                Log.Error($"Exception: {ex.Message} \nPlace of occurrence: {ex.TargetSite}");
             }
 
             jsonInput = new string[] {

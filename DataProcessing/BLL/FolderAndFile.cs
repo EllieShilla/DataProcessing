@@ -3,18 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataProcessing.BLL
 {
     internal class FolderAndFile
     {
-        private readonly string folderName = System.Configuration.ConfigurationManager.AppSettings["folderPathB"];
-
         public string CreateSubFolder()
         {
-            string subFolderName = $@"{folderName}\{DateTime.Today.ToString("MM-dd-yyyy")}";
+            string subFolderName = $@"{ConfigItems.fileBPath}\{DateTime.Today.ToString("MM-dd-yyyy")}";
 
             if (!Directory.Exists(subFolderName))
             {
@@ -40,6 +36,11 @@ namespace DataProcessing.BLL
         {
             var updatedJsonString = JsonConvert.SerializeObject(paymentDataList);
             File.WriteAllText(CreateFileInSubfolder(), updatedJsonString);
+        }
+
+        public string CreateMetaLogFileName()
+        {
+            return string.Concat($"{CreateSubFolder()}/", "metaLog.log");
         }
     }
 }

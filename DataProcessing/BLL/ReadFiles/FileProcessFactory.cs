@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DataProcessing.BLL.Log;
+using System;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DataProcessing
 {
@@ -11,7 +9,8 @@ namespace DataProcessing
     {
         public IFileReader GetFileReader(FileInfo file)
         {
-            if (file is null) throw new Exception($"file {file.Name} is not exist");
+            if (file is null)
+                throw new Exception($"file {file.Name} is not exist");
 
             switch (file.Extension.ToLower())
             {
@@ -20,7 +19,8 @@ namespace DataProcessing
                 case ".csv":
                     return new FileReaderCsv(Encoding.UTF8, file.FullName);
                 default:
-                    throw new NotImplementedException();
+                    throw new Exception($"file type {file.Extension.ToLower()} is not processed");
+
             }
 
         }
