@@ -10,8 +10,8 @@ namespace DataProcessing.BLL
 {
     internal class MidnightTimer
     {
-        private int hour = 15;
-        private int minute = 11;
+        private int hour = 00;
+        private int minute = 00;
         private int seconds = 00;
         private FolderAndFile folderAndFile;
 
